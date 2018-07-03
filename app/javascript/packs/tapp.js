@@ -14,6 +14,15 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
+import { Provider } from "react-redux";
+import { createStore, compose, applyMiddleware } from "redux";
+import { ConnectedRouter, routerMiddleware } from "react-router-redux";
+import { createLogger } from "redux-logger";
+import ReduxThunk from "redux-thunk";
+import createHistory from "history/createBrowserHistory";
+
+import reducers from "../tapp/redux/reducers/index";
+
 import { appState } from '../tapp/appState.js';
 import { fetchAll, fetchAuth } from '../tapp/fetch.js';
 import { routeConfig } from '../tapp/routeConfig.js';
@@ -26,6 +35,19 @@ import { Unassigned } from '../tapp/views/unassigned/unassigned';
 import { Summary } from '../tapp/views/summary/summary';
 import { Assistant } from '../tapp/views/assistant/assistant';
 import { ApplicantModal } from '../tapp/components/applicantModal.js';
+
+// maybe no logger when its in development mode?
+const logger = createLogger();
+const history = createHistory();
+
+const store = createStore(
+    reducers,
+    compose(
+        applyMiddleware(routerMiddleware(history), ReduxThunk, logger),
+        window.devToolsExtension? window.devToolsExtension(): f => f
+    )
+);
+
 
 /*** Main app component ***/
 
