@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col, Well } from 'react-bootstrap';
-import { CourseMenu } from './courseMenu.js';
-import { CoursePanel } from './coursePanel.js';
+import { CourseMenu } from '../../components/courseMenu';
+import { CoursePanel } from '../../components/coursePanel';
 
 class ABC extends React.Component {
     // determine the appropriate styling to produce the specified layout

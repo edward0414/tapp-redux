@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { ApplicantTableMenu } from './applicantTableMenu.js';
-import { ApplicantTable } from './applicantTable.js';
-import { routeConfig } from '../routeConfig.js';
+import { ApplicantTableMenu } from '../../components/applicantTableMenu.js';
+import { ApplicantTable } from '../../components/applicantTable.js';
+import { routeConfig } from '../../routeConfig.js';
 
-class Assigned extends React.Component {
+class Unassigned extends React.Component {
     render() {
         let nullCheck = this.props.anyNull();
         if (nullCheck) {
@@ -82,27 +82,26 @@ class Assigned extends React.Component {
                 style: { width: 0.20 },
             },
             {
-                header: 'Course(s)',
+                header: 'Course Preferences',
                 data: p =>
                     <ButtonToolbar>
-                        {this.props.getAssignmentsByApplicant(p.applicantId).map(ass =>
+                        {this.props.getApplicationById(p.applicantId).prefs.map(pref =>
                             <Link
                                 to={
                                     routeConfig.abc.route +
                                     '#' +
-                                    ass.positionId +
+                                    pref.positionId +
                                     '-' +
                                     p.applicantId +
-                                    '-1'
+                                    '-0'
                                 }
-                                key={'link-' + p.applicantId + '-' + ass.positionId}>
+                                key={'link-' + p.applicantId + '-' + pref.positionId}>
                                 <Button
                                     bsSize="xsmall"
                                     style={{ borderColor: '#555' }}
-                                    onClick={() => this.props.selectSingleCourse(ass.positionId)}>
-                                    {this.props.getCourseCodeById(
-                                        ass.positionId
-                                    )}&nbsp;&middot;&nbsp;{ass.hours}
+                                    onClick={() =>
+                                        this.props.selectSingleCourse(pref.positionId)}>
+                                    {this.props.getCourseCodeById(pref.positionId)}
                                 </Button>
                             </Link>
                         )}
@@ -110,17 +109,17 @@ class Assigned extends React.Component {
 
                 filterLabel: 'Course',
                 filterCategories: this.props.getCourseCodes(),
-                // for each course, filter out applicants who are not assigned to that course
+                // for each course, filter out applicants who did not apply to that course
                 filterFuncs: Object.keys(this.props.getCoursesList()).map(key => p =>
                     this.props
-                        .getAssignmentsByApplicant(p.applicantId)
-                        .some(pref => pref.positionId == key)
+                        .getApplicationById(p.applicantId)
+                        .prefs.some(pref => pref.positionId == key)
                 ),
             },
         ];
-        let className = ".navbar-margin-top"
+
         return (
-            <Grid fluid id="assigned-grid">
+            <Grid fluid id="unassigned-grid">
                 <ApplicantTableMenu
                     config={this.config}
                     getSelectedSortFields={() => this.props.getSorts()}
@@ -136,8 +135,8 @@ class Assigned extends React.Component {
 
                 <ApplicantTable
                     config={this.config}
-                    getApplicants={() => this.props.getAssignedApplicants()}
-                    rowId={p => 'assigned-' + p.applicantId}
+                    getApplicants={() => this.props.getUnassignedApplicants()}
+                    rowId={p => 'unassigned-' + p.applicantId}
                     getSelectedSortFields={() => this.props.getSorts()}
                     getSelectedFilters={() => this.props.getFilters()}
                     width="100vw"
@@ -161,4 +160,4 @@ class Assigned extends React.Component {
     }
 }
 
-export { Assigned };
+export { Unassigned };

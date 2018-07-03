@@ -30,6 +30,25 @@ const initialState = {
 
     selectedSession: null,
 
+    // nav field
+    /*
+    nav: {
+        roles: [], // array of { 'tapp_admin', 'instructor' }
+        selectedRole: null,
+        user: null,
+
+        selectedTab: null,
+
+        // list of unread notifications (string can contain HTML, but be careful because it is not sanitized!)
+        notifications: [],
+        isDevelopment: null,
+        alerts: [],
+        selectedApplicant: null,
+        selectedRound: null,
+        selectedSession: null,
+    },
+    */
+
     // ABC view
     abcView: {
         selectedCourses: [],
@@ -85,6 +104,20 @@ const initialState = {
     sessions: { fetching: 0, list: null },
 
     importing: 0,
+
+    //Database data
+    /*
+    database: {
+        applicants: { fetching: 0, list: null },
+        applications: { fetching: 0, list: null },
+        assignments: { fetching: 0, list: null },
+        courses: { fetching: 0, list: null },
+        instructors: { fetching: 0, list: null },
+        sessions: { fetching: 0, list: null },
+
+        importing: 0,
+    }
+    */
 };
 
 class AppState {

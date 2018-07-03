@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Grid, Panel, ListGroup } from 'react-bootstrap';
-import { CourseList } from './courseList.js';
-import { CourseForm } from './courseForm.js';
-import { InstructorModal } from './instructorModal.js';
+import { CourseList } from '../../components/courseList.js';
+import { CourseForm } from '../../components/courseForm.js';
+import { InstructorModal } from '../../components/instructorModal.js';
 
 class Courses extends React.Component {
     selectThisTab() {

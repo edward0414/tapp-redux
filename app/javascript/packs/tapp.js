@@ -19,12 +19,12 @@ import { fetchAll, fetchAuth } from '../tapp/fetch.js';
 import { routeConfig } from '../tapp/routeConfig.js';
 
 import { Navbar } from '../tapp/components/navbar.js';
-import { Courses } from '../tapp/components/courses.js';
-import { ABC } from '../tapp/components/abc.js';
-import { Assigned } from '../tapp/components/assigned.js';
-import { Unassigned } from '../tapp/components/unassigned.js';
-import { Summary } from '../tapp/components/summary.js';
-import { Assistant } from '../tapp/components/assistant.js';
+import { Courses } from '../tapp/views/courses/courses';
+import { ABC } from '../tapp/views/abc/abc';
+import { Assigned } from '../tapp/views/assigned/assigned';
+import { Unassigned } from '../tapp/views/unassigned/unassigned';
+import { Summary } from '../tapp/views/summary/summary';
+import { Assistant } from '../tapp/views/assistant/assistant';
 import { ApplicantModal } from '../tapp/components/applicantModal.js';
 
 /*** Main app component ***/
@@ -47,6 +47,7 @@ class App extends React.Component {
 
         // this should only happen before we have fetched the current auth information
         if (user == null) {
+            console.log("packs.js: user is null");
             return <div id="loader" />;
         }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Panel, PanelGroup, ButtonGroup, Form, Button, Well, Table } from 'react-bootstrap';
-import { ImportForm } from './importForm.js';
-import { ExportForm } from './exportForm.js';
+import { ImportForm } from '../../components/importForm.js';
+import { ExportForm } from '../../components/exportForm.js';
 
 class Summary extends React.Component {
     render() {
