@@ -1,10 +1,9 @@
+export default (state = {}, isLoading = false, action) => {
+  switch (action.type) {
+    case IS_LOADING:
+      return;
 
-export default (state = {}, action) => {
-    switch (action.type) {
-        case:
-            return;
-
-        default:
-            return state;
-    }
-}
+    default:
+      return state;
+  }
+};

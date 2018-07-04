@@ -7,12 +7,12 @@ import nav from "./nav";
 import unassigned from "./unassigned";
 
 const reducers = combineReducers({
-    abc,
-    assigned,
-    database,
-    instructorModal,
-    nav,
-    unassigned
+  abc,
+  assigned,
+  database,
+  instructorModal,
+  nav,
+  unassigned
 });
 
-export const reducers;
+export default reducers;
