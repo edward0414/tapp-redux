@@ -242,4 +242,4 @@ const PerCourseStats = props => {
   );
 };
 
-export { Summary };
+export default Summary;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Row, Col, Well } from "react-bootstrap";
+import { Grid, Well } from "react-bootstrap";
 import { CourseMenu } from "../../components/courseMenu";
 import { CoursePanel } from "../../components/coursePanel";
 
@@ -156,4 +156,4 @@ class ABC extends React.Component {
   }
 }
 
-export { ABC };
+export default ABC;

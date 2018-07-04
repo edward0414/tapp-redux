@@ -55,4 +55,4 @@ class Courses extends React.Component {
   }
 }
 
-export { Courses };
+export default Courses;

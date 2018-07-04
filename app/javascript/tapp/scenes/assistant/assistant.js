@@ -27,4 +27,4 @@ class Assistant extends React.Component {
   }
 }
 
-export { Assistant };
+export default Assistant;

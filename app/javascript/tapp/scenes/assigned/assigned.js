@@ -168,4 +168,4 @@ class Assigned extends React.Component {
   }
 }
 
-export { Assigned };
+export default Assigned;

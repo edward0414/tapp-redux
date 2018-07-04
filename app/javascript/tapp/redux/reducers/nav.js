@@ -1,4 +1,3 @@
-
 // nav field
 /*
 nav: {
@@ -18,12 +17,21 @@ nav: {
 },
 */
 
-export default (state = { roles: [], selectedRole: null, user: null, selectedTab: null, notifications: [], isDevelopment: null, alerts:[], selectedApplicant: null }, action) => {
-    switch (action.type) {
-        case:
-            return;
-
-        default:
-            return state;
-        }
-}
+export default (
+  state = {
+    roles: [],
+    selectedRole: null,
+    user: null,
+    selectedTab: null,
+    notifications: [],
+    isDevelopment: null,
+    alerts: [],
+    selectedApplicant: null
+  },
+  action
+) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};

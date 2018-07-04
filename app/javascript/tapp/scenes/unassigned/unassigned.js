@@ -166,4 +166,4 @@ class Unassigned extends React.Component {
   }
 }
 
-export { Unassigned };
+export default Unassigned;
