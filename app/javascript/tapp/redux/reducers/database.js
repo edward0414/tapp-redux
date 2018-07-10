@@ -26,8 +26,47 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case IS_LOADING:
+    case "isLoading":
       return { ...state, isLoading: true, error: {} };
+
+    case "fetchingCoursesSucc":
+      return { ...state, courses: action.payload, isLoading: false, error: {} };
+
+    case "fetchingCoursesFail":
+      return { ...state, error: action.payload, isLoading: false };
+
+    case "fetchingApplicantsSucc":
+      return {
+        ...state,
+        applicantss: action.payload,
+        isLoading: false,
+        error: {}
+      };
+
+    case "fetchingApplicantsFail":
+      return { ...state, error: action.payload, isLoading: false };
+
+    case "fetchingApplicationsSucc":
+      return {
+        ...state,
+        applicationss: action.payload,
+        isLoading: false,
+        error: {}
+      };
+
+    case "fetchingApplicationsFail":
+      return { ...state, error: action.payload, isLoading: false };
+
+    case "fetchingAssignmentsSucc":
+      return {
+        ...state,
+        assignmentss: action.payload,
+        isLoading: false,
+        error: {}
+      };
+
+    case "fetchingAssignmentsFail":
+      return { ...state, error: action.payload, isLoading: false };
 
     default:
       return state;

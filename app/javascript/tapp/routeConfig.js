@@ -1,52 +1,50 @@
 /*** Route configuration ***/
+// import loadable from "loadable-components";
 
-import Courses from "./scenes/courses/exporter";
-import ABC from "./scenes/abc/exporter";
-import Assigned from "./scenes/assigned/exporter";
+// export const Courses = loadable(() => import("./scenes/courses/exporter"));
+// export const ABC = loadable(() => import("./scenes/abc/exporter"));
+// export const Assigned = loadable(() => import("./scenes/assigned/exporter"));
+// export const Unassigned = loadable(() =>
+//   import("./scenes/unassigned/exporter")
+// );
+// export const Summary = loadable(() => import("./scenes/summary/exporter"));
+// export const Assistant = loadable(() => import("./scenes/assistant/exporter"));
+// export const Instructor = loadable(() => import("./scenes/abc/exporter"));
 
-const routeConfig = {
+export const routeConfig = {
   courses: {
     label: "Courses",
     route: "/courses",
-    id: "courses",
-    component: Courses
+    id: "courses"
   },
   abc: {
     label: "Applicants by Course",
     route: "/applicantsbycourse",
-    id: "abc",
-    component: ABC
+    id: "abc"
   },
   assigned: {
     label: "All Assigned",
     route: "/assigned",
-    id: "assigned",
-    component: Assigned
+    id: "assigned"
   },
   unassigned: {
     label: "All Unassigned",
     route: "/unassigned",
-    id: "unassigned",
-    component: import("./scenes/unassigned/exporter")
+    id: "unassigned"
   },
   summary: {
     label: "Summary",
     route: "/summary",
-    id: "summary",
-    component: import("./scenes/summary/exporter")
+    id: "summary"
   },
   assistant: {
     label: "Assistant Panel",
     route: "/assistantPanel",
-    id: "assistant",
-    component: import("./scenes/assistant/exporter")
+    id: "assistant"
   },
   instructor: {
     label: "Instructor Panel",
     route: "/instructorPanel",
-    id: "instructor",
-    component: import("./scenes/abc/exporter")
+    id: "instructor"
   }
 };
-
-export { routeConfig };

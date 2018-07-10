@@ -26,11 +26,30 @@ export default (
     notifications: [],
     isDevelopment: null,
     alerts: [],
-    selectedApplicant: null
+    selectedApplicant: null,
+    isLoading: false,
+    error: {}
   },
   action
 ) => {
   switch (action.type) {
+    case "isLoading":
+      return { ...state, isLoading: true, error: {} };
+
+    case "fetchingAuthSucc":
+      //more to add
+
+      return {
+        ...state,
+        roles: action.payload.roles,
+        user: action.payload.user,
+        isLoading: false,
+        error: {}
+      };
+
+    case "fetchingAuthFail":
+      return { ...state, error: action.payload, isLoading: false };
+
     default:
       return state;
   }

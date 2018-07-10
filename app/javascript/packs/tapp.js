@@ -1,3 +1,5 @@
+import { ReactDOM } from "react-dom";
+// import { loadComponents } from "loadable-components";
 import { createStore, compose, applyMiddleware } from "redux";
 import { ConnectedRouter, routerMiddleware } from "react-router-redux";
 import { createLogger } from "redux-logger";
@@ -20,13 +22,20 @@ const store = createStore(
 );
 
 // document.addEventListener("DOMContentLoaded", () => {
-//   ReactDOM.render(<App />, document.getElementById("root"));
+//   ReactDOM.render(
+//     <Provider store={store}>
+//       <ConnectedRouter history={history}>
+//         <Hello />
+//       </ConnectedRouter>
+//     </Provider>,
+//     document.getElementById("root")
+//   );
 // });
 
-render(
+ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />>
+      <App />
     </ConnectedRouter>
   </Provider>,
   document.getElementById("root")
