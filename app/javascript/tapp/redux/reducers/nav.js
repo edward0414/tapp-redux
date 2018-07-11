@@ -1,3 +1,9 @@
+import {
+  NAV_IS_LOADING,
+  FETCH_AUTH_SUCC,
+  FETCH_AUTH_FAIL
+} from "../constants/nav";
+
 // nav field
 /*
 nav: {
@@ -33,21 +39,23 @@ export default (
   action
 ) => {
   switch (action.type) {
-    case "isLoading":
+    case NAV_IS_LOADING:
       return { ...state, isLoading: true, error: {} };
 
-    case "fetchingAuthSucc":
+    case FETCH_AUTH_SUCC:
       //more to add
 
       return {
         ...state,
         roles: action.payload.roles,
         user: action.payload.user,
+        selectedRole: action.payload.roles[1],
+        isDevelopment: action.payload.isDevelopment,
         isLoading: false,
         error: {}
       };
 
-    case "fetchingAuthFail":
+    case FETCH_AUTH_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
     default:

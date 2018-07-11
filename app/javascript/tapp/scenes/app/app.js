@@ -21,6 +21,7 @@ import React from "react";
 import { appState } from "../../appState.js";
 import { fetchAll, fetchAuth } from "../../fetch.js";
 import * as routes from "../../routeConfig.js";
+import PropTypes from "prop-types";
 
 import { Navbar } from "../../components/navbar.js";
 import { ApplicantModal } from "../../components/applicantModal.js";
@@ -32,25 +33,31 @@ import Summary from "../summary/exporter";
 /*** Main app component ***/
 
 class App extends React.Component {
+  static propTypes = {
+    selectedRole: PropTypes.any,
+    user: PropTypes.any,
+    fetchAuth: PropTypes.func,
+    fetchApplicants: PropTypes.func,
+    fetchApplications: PropTypes.func,
+    fetchAssignments: PropTypes.func,
+    fetchCourses: PropTypes.func
+  };
+
   constructor(props) {
     super(props);
 
     // get current user role and username
-    fetchAuth().then(() => fetchAll());
-  }
-
-  componentDidMount() {
-    // appState.subscribe(this.forceUpdate.bind(this, null));
-    
-    TODO!!!!
-
-    // let role = appState.getSelectedUserRole(),
-    //   user = appState.getCurrentUserName();
+    this.props.fetchAuth();
+    this.props.fetchApplicants();
+    this.props.fetchApplications();
+    this.props.fetchAssignments();
+    this.props.fetchCourses();
   }
 
   render() {
+    const user = this.props.user;
+    // const role = this.props.selectedRole;
 
-    // this should only happen before we have fetched the current auth information
     if (user == null) {
       console.log("packs.js: user is null");
       return <div id="loader" />;
@@ -65,14 +72,14 @@ class App extends React.Component {
     //     return <InstrRouter {...appState} />;
     // }
 
-    return null;
+    // return null;
   }
 }
 
 /*** Routers ***/
 
 const AdminRouter = props => {
-  let selectedApplicant = props.getSelectedApplicant();
+  // let selectedApplicant = props.getSelectedApplicant();
 
   return (
     <Router basename="tapp">
@@ -80,27 +87,21 @@ const AdminRouter = props => {
         <Navbar {...props} role="tapp_admin" />
 
         <Switch>
-          <Route
-            path={routes.routeConfig.courses.route}
-            component={routes.Courses}
-          />
-          <Route path={routes.routeConfig.abc.route} component={routes.ABC} />
+          <Route path={routes.routeConfig.courses.route} component={Courses} />
+          {/* <Route path={routes.routeConfig.abc.route} component={routes.ABC} /> */}
           <Route
             path={routes.routeConfig.assigned.route}
-            component={routes.Assigned}
+            component={Assigned}
           />
           <Route
             path={routes.routeConfig.unassigned.route}
-            component={routes.Unassigned}
+            component={Unassigned}
           />
-          <Route
-            path={routes.routeConfig.summary.route}
-            component={routes.Summary}
-          />
+          <Route path={routes.routeConfig.summary.route} component={Summary} />
           <Redirect from="/" to={routes.routeConfig.summary.route} />
         </Switch>
 
-        {selectedApplicant &&
+        {/* {selectedApplicant &&
           <ApplicantModal applicantId={selectedApplicant} {...props} />}
 
         <div className="container-fluid" id="alert-container">
@@ -115,7 +116,7 @@ const AdminRouter = props => {
                 dangerouslySetInnerHTML={{ __html: alert.text }}
               />
             )}
-        </div>
+        </div> */}
       </div>
     </Router>
   );

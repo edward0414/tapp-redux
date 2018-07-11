@@ -1,3 +1,15 @@
+import {
+  DATABASE_IS_LOADING,
+  FETCH_APPLICANTS_SUCC,
+  FETCH_APPLICANTS_FAIL,
+  FETCH_ASSIGNMENTS_SUCC,
+  FETCH_ASSIGNMENTS_FAIL,
+  FETCH_APPLICATIONS_SUCC,
+  FETCH_APPLICATIONS_FAIL,
+  FETCH_COURSES_SUCC,
+  FETCH_COURSES_FAIL
+} from "../constants/database";
+
 /*
     database: {
         isLoading: false,
@@ -26,46 +38,46 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case "isLoading":
+    case DATABASE_IS_LOADING:
       return { ...state, isLoading: true, error: {} };
 
-    case "fetchingCoursesSucc":
+    case FETCH_COURSES_SUCC:
       return { ...state, courses: action.payload, isLoading: false, error: {} };
 
-    case "fetchingCoursesFail":
+    case FETCH_COURSES_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
-    case "fetchingApplicantsSucc":
+    case FETCH_APPLICANTS_SUCC:
       return {
         ...state,
-        applicantss: action.payload,
+        applicants: action.payload,
         isLoading: false,
         error: {}
       };
 
-    case "fetchingApplicantsFail":
+    case FETCH_APPLICANTS_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
-    case "fetchingApplicationsSucc":
+    case FETCH_APPLICATIONS_SUCC:
       return {
         ...state,
-        applicationss: action.payload,
+        applications: action.payload,
         isLoading: false,
         error: {}
       };
 
-    case "fetchingApplicationsFail":
+    case FETCH_APPLICATIONS_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
-    case "fetchingAssignmentsSucc":
+    case FETCH_ASSIGNMENTS_SUCC:
       return {
         ...state,
-        assignmentss: action.payload,
+        assignments: action.payload,
         isLoading: false,
         error: {}
       };
 
-    case "fetchingAssignmentsFail":
+    case FETCH_ASSIGNMENTS_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
     default:

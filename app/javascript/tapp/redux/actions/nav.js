@@ -9,8 +9,11 @@ const navIsLoading = isLoading => {
 };
 
 //TODO
-const fetchingAuthSucc = (roles, user) => {
-  return { type: FETCH_AUTH_SUCC, payload: { roles: roles, user: user } };
+const fetchingAuthSucc = (roles, user, isDevelopment) => {
+  return {
+    type: FETCH_AUTH_SUCC,
+    payload: { roles: roles, user: user, isDevelopment: isDevelopment }
+  };
 };
 
 const fetchingAuthFail = error => {
