@@ -7,7 +7,13 @@ import {
   FETCH_ASSIGNMENTS_SUCC,
   FETCH_ASSIGNMENTS_FAIL,
   FETCH_COURSES_SUCC,
-  FETCH_COURSES_FAIL
+  FETCH_COURSES_FAIL,
+  FETCH_INSTRUCTORS_SUCC,
+  FETCH_INSTRUCTORS_FAIL,
+  FETCH_SESSIONS_SUCC,
+  FETCH_SESSIONS_FAIL,
+  CREATE_INSTRUCTOR_SUCC,
+  CREATE_INSTRUCTOR_FAIL
 } from "../constants/database";
 
 const databaseIsLoading = isLoading => {
@@ -46,6 +52,30 @@ const fetchCoursesFail = error => {
   return { type: FETCH_COURSES_FAIL, payload: error };
 };
 
+const fetchInstructorsSucc = instructors => {
+  return { type: FETCH_INSTRUCTORS_SUCC, payload: instructors };
+};
+
+const fetchInstructorsFail = error => {
+  return { type: FETCH_INSTRUCTORS_FAIL, payload: error };
+};
+
+const fetchSessionsSucc = sessions => {
+  return { type: FETCH_SESSIONS_SUCC, payload: sessions };
+};
+
+const fetchSessionsFail = error => {
+  return { type: FETCH_SESSIONS_FAIL, payload: error };
+};
+
+const createInstructorSucc = () => {
+  return { type: CREATE_INSTRUCTOR_SUCC, payload: "true" };
+};
+
+const createInstructorFail = error => {
+  return { type: CREATE_INSTRUCTOR_FAIL, payload: error };
+};
+
 export {
   databaseIsLoading,
   fetchApplicantsSucc,
@@ -55,5 +85,11 @@ export {
   fetchAssignmentsSucc,
   fetchAssignmentsFail,
   fetchCoursesSucc,
-  fetchCoursesFail
+  fetchCoursesFail,
+  fetchInstructorsSucc,
+  fetchInstructorsFail,
+  fetchSessionsSucc,
+  fetchSessionsFail,
+  createInstructorSucc,
+  createInstructorFail
 };

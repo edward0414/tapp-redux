@@ -1,7 +1,10 @@
 import {
   NAV_IS_LOADING,
   FETCH_AUTH_SUCC,
-  FETCH_AUTH_FAIL
+  FETCH_AUTH_FAIL,
+  ADD_ALERTS,
+  SELECT_APPLICANT,
+  SELECT_TAB
 } from "../constants/nav";
 
 // nav field
@@ -49,7 +52,7 @@ export default (
         ...state,
         roles: action.payload.roles,
         user: action.payload.user,
-        selectedRole: action.payload.roles[1],
+        selectedRole: action.payload.roles[0],
         isDevelopment: action.payload.isDevelopment,
         isLoading: false,
         error: {}
@@ -57,6 +60,17 @@ export default (
 
     case FETCH_AUTH_FAIL:
       return { ...state, error: action.payload, isLoading: false };
+
+    case ADD_ALERTS: {
+      const { alerts } = state;
+      alerts.push(action.payload);
+      return { ...state, alerts };
+    }
+    case SELECT_APPLICANT:
+      return { ...state, selectedApplicant: action.payload };
+
+    case SELECT_TAB:
+      return { ...state, selectedTab: action.payload };
 
     default:
       return state;

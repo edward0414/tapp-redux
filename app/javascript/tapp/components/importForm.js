@@ -1,214 +1,231 @@
-import React from 'react';
+import React from "react";
 import {
-    Form,
-    FormGroup,
-    ControlLabel,
-    FormControl,
-    OverlayTrigger,
-    Popover,
-} from 'react-bootstrap';
+  Form,
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  OverlayTrigger,
+  Popover
+} from "react-bootstrap";
 
 // form for importing data from a file and persisting it to the database
 class ImportForm extends React.Component {
-    uploadFile() {
-        let importFunc, files = this.files.files;
+  uploadFile() {
+    let importFunc,
+      files = this.files.files;
 
-        if (files.length > 0) {
-            importFunc = this.importChoices(files[0], this.data.value);
+    if (files.length > 0) {
+      importFunc = this.importChoices(files[0], this.data.value);
+      if (
+        confirm(
+          'Are you sure you want to import "' +
+            files[0].name +
+            '" into the database?'
+        )
+      ) {
+        let reader = new FileReader();
+        reader.onload = event => importFunc(event.target.result);
+        reader.readAsText(files[0]);
+      }
+    } else {
+      this.props.alert("<b>Error:</b> No file chosen.");
+    }
+  }
+
+  importChoices(file, choice) {
+    switch (choice) {
+      case "chass":
+        if (this.getFileType(file) != "application/json") {
+          this.props.alert(
+            "<b>Error:</b> The file you uploaded is not a JSON."
+          );
+          return;
+        }
+        return data => {
+          try {
+            data = JSON.parse(data);
+
             if (
-                confirm(
-                    'Are you sure you want to import "' + files[0].name + '" into the database?'
-                )
+              data["courses"] !== undefined &&
+              data["applicants"] !== undefined
             ) {
-                let reader = new FileReader();
-                reader.onload = event => importFunc(event.target.result);
-                reader.readAsText(files[0]);
+              this.props.importChass(
+                data,
+                this.year.value,
+                this.semester.value
+              );
+            } else {
+              this.props.alert("<b>Error:</b> This is not a CHASS JSON.");
             }
-        } else {
-            this.props.alert('<b>Error:</b> No file chosen.');
-        }
-    }
-
-    importChoices(file, choice){
-        switch (choice) {
-          case "chass":
-              if (this.getFileType(file) != 'application/json') {
-                  this.props.alert('<b>Error:</b> The file you uploaded is not a JSON.');
-                  return;
-              }
-              return data => {
-                  try {
-                      data = JSON.parse(data);
-
-                      if (data['courses'] !== undefined && data['applicants'] !== undefined) {
-                          this.props.importChass(data, this.year.value, this.semester.value);
-                      } else {
-                          this.props.alert('<b>Error:</b> This is not a CHASS JSON.');
-                      }
-                  } catch (err) {
-                      this.props.alert('<b>Error:</b> ' + err);
-                  }
-              };
-          case "enrol":
-              return data => {
-                  try {
-                      this.props.importEnrolment(data);
-                  } catch (err) {
-                      this.props.alert('<b>Error:</b> ' + err);
-                  }
-              };
-          case "instructor":
-              if (this.getFileType(file) != 'application/json') {
-                  this.props.alert('<b>Error:</b> The file you uploaded is not a JSON.');
-                  return;
-              }
-              return data => {
-                  try {
-                      data = JSON.parse(data);
-
-                      if (data['instructors'] !== undefined) {
-                          this.props.importInstructors(data);
-                      } else {
-                          this.props.alert('<b>Error:</b> This is not an instructor JSON.');
-                      }
-                  } catch (err) {
-                      this.props.alert('<b>Error:</b> ' + err);
-                  }
-              };
-        }
-
-    }
-
-    getFileType(file){
-        let type = file.type;
-        if (type != ""){
-          return type;
-        }
-        else{
-          let name = file.name.split(".");
-          if (name[name.length-1]=="json"){
-            return "application/json";
+          } catch (err) {
+            this.props.alert("<b>Error:</b> " + err);
           }
-          else{
-            return "";
+        };
+      case "enrol":
+        return data => {
+          try {
+            this.props.importEnrolment(data);
+          } catch (err) {
+            this.props.alert("<b>Error:</b> " + err);
           }
+        };
+      case "instructor":
+        if (this.getFileType(file) != "application/json") {
+          this.props.alert(
+            "<b>Error:</b> The file you uploaded is not a JSON."
+          );
+          return;
         }
-    }
+        return data => {
+          try {
+            data = JSON.parse(data);
 
-    detectChoice(){
-      let options = document.getElementById("chassOptions");
-      if (this.data.value=="chass")
-          options.style.display = "block";
-      else
-          options.style.display = "none";
+            if (data["instructors"] !== undefined) {
+              this.props.importInstructors(data);
+            } else {
+              this.props.alert("<b>Error:</b> This is not an instructor JSON.");
+            }
+          } catch (err) {
+            this.props.alert("<b>Error:</b> " + err);
+          }
+        };
     }
+  }
 
-    setChassOption(visible){
+  getFileType(file) {
+    let type = file.type;
+    if (type != "") {
+      return type;
+    } else {
+      let name = file.name.split(".");
+      if (name[name.length - 1] == "json") {
+        return "application/json";
+      } else {
+        return "";
+      }
     }
+  }
 
-    render() {
-        return (
-            <Form inline id="import">
-                <FormGroup >
-                  <span  style={{float: "left"}}>
-                    <ControlLabel>Import&ensp;</ControlLabel>
-                    <FormControl onChange={()=>this.detectChoice()}
-                        componentClass="select"
-                        inputRef={ref => {
-                            this.data = ref;
-                        }}>
-                        <option value="chass">Courses/Applicants</option>
-                        <option value="instructor">Instructors</option>
-                        <option value="enrol">Enrolment</option>
-                    </FormControl>
-                    <ControlLabel>
-                        &ensp;<i
-                            className="fa fa-info-circle"
-                            style={{ color: 'blue' }}
-                            onClick={() =>
-                                document.getElementById(this.data.value + '-dialog').click()}
-                        />
-                        <ChassDialog />
-                        <EnrolDialog />
-                    </ControlLabel>
-                    </span>
-                    <span id="chassOptions" style={{float: "left"}}>
-                    <ControlLabel>&ensp;for&ensp;</ControlLabel>
-                    <FormControl
-                        componentClass="select"
-                        inputRef={ref => {
-                            this.semester = ref;
-                        }}>
-                        <option>Winter</option>
-                        <option>Spring</option>
-                        <option>Fall</option>
-                    </FormControl>&nbsp;
-                    <FormControl
-                        id="year"
-                        type="number"
-                        min="2000"
-                        step="1"
-                        defaultValue={new Date().getFullYear()}
-                        inputRef={ref => {
-                            this.year = ref;
-                        }}
-                    />
-                    </span>
-                    <FormControl.Static style={{ verticalAlign: 'middle' }}>
-                        &emsp;&emsp;{this.props.importing()
-                            ? <i
-                                  className="fa fa-spinner fa-spin"
-                                  style={{ fontSize: '20px', color: 'blue' }}
-                              />
-                            : <i
-                                  className="fa fa-upload"
-                                  style={{ fontSize: '20px', color: 'blue', cursor: 'pointer' }}
-                                  onClick={() => this.uploadFile()}
-                              />}&ensp;
-                    </FormControl.Static>
-                    <FormControl
-                        id="file"
-                        type="file"
-                        accept="application/json"
-                        inputRef={ref => {
-                            this.files = ref;
-                        }}
-                    />
-                </FormGroup>
-            </Form>
-        );
-    }
+  detectChoice() {
+    let options = document.getElementById("chassOptions");
+    if (this.data.value == "chass") options.style.display = "block";
+    else options.style.display = "none";
+  }
+
+  setChassOption(visible) {}
+
+  render() {
+    return (
+      <Form inline id="import">
+        <FormGroup>
+          <span style={{ float: "left" }}>
+            <ControlLabel>Import&ensp;</ControlLabel>
+            <FormControl
+              onChange={() => this.detectChoice()}
+              componentClass="select"
+              inputRef={ref => {
+                this.data = ref;
+              }}
+            >
+              <option value="chass">Courses/Applicants</option>
+              <option value="instructor">Instructors</option>
+              <option value="enrol">Enrolment</option>
+            </FormControl>
+            <ControlLabel>
+              &ensp;<i
+                className="fa fa-info-circle"
+                style={{ color: "blue" }}
+                onClick={() =>
+                  document.getElementById(this.data.value + "-dialog").click()}
+              />
+              <ChassDialog />
+              <EnrolDialog />
+            </ControlLabel>
+          </span>
+          <span id="chassOptions" style={{ float: "left" }}>
+            <ControlLabel>&ensp;for&ensp;</ControlLabel>
+            <FormControl
+              componentClass="select"
+              inputRef={ref => {
+                this.semester = ref;
+              }}
+            >
+              <option>Winter</option>
+              <option>Spring</option>
+              <option>Fall</option>
+            </FormControl>&nbsp;
+            <FormControl
+              id="year"
+              type="number"
+              min="2000"
+              step="1"
+              defaultValue={new Date().getFullYear()}
+              inputRef={ref => {
+                this.year = ref;
+              }}
+            />
+          </span>
+          <FormControl.Static style={{ verticalAlign: "middle" }}>
+            &emsp;&emsp;{this.props.importing()
+              ? <i
+                  className="fa fa-spinner fa-spin"
+                  style={{ fontSize: "20px", color: "blue" }}
+                />
+              : <i
+                  className="fa fa-upload"
+                  style={{ fontSize: "20px", color: "blue", cursor: "pointer" }}
+                  onClick={() => this.uploadFile()}
+                />}&ensp;
+          </FormControl.Static>
+          <FormControl
+            id="file"
+            type="file"
+            accept="application/json"
+            inputRef={ref => {
+              this.files = ref;
+            }}
+          />
+        </FormGroup>
+      </Form>
+    );
+  }
 }
 
 const ChassDialog = props =>
-    <OverlayTrigger
-        trigger="click"
-        rootClose
-        placement="right"
-        overlay={
-            <Popover id="help" placement="right" title="CHASS JSON format">
-                <pre>
-                    {chassFormat}
-                </pre>
-            </Popover>
-        }>
-        <span id="chass-dialog" />
-    </OverlayTrigger>;
+  <OverlayTrigger
+    trigger="click"
+    rootClose
+    placement="right"
+    overlay={
+      <Popover id="help" placement="right" title="CHASS JSON format">
+        <pre>
+          {chassFormat}
+        </pre>
+      </Popover>
+    }
+  >
+    <span id="chass-dialog" />
+  </OverlayTrigger>;
 
 const EnrolDialog = props =>
-    <OverlayTrigger
-        trigger="click"
-        rootClose
+  <OverlayTrigger
+    trigger="click"
+    rootClose
+    placement="right"
+    overlay={
+      <Popover
+        id="help"
         placement="right"
-        overlay={
-            <Popover id="help" placement="right" title="Enrolment fixed-width file line format">
-                <pre>
-                    {enrolFormat}
-                </pre>
-            </Popover>
-        }>
-        <span id="enrol-dialog" />
-    </OverlayTrigger>;
+        title="Enrolment fixed-width file line format"
+      >
+        <pre>
+          {enrolFormat}
+        </pre>
+      </Popover>
+    }
+  >
+    <span id="enrol-dialog" />
+  </OverlayTrigger>;
 
 const chassFormat = `{
   "courses": [

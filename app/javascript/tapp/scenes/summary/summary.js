@@ -9,21 +9,36 @@ import {
   Well,
   Table
 } from "react-bootstrap";
+import PropTypes from "prop-types";
 import { ImportForm } from "../../components/importForm.js";
 import { ExportForm } from "../../components/exportForm.js";
 
 class Summary extends React.Component {
-  render() {
-    let nullCheck = this.props.anyNull();
-    if (nullCheck) {
-      return <div id="loader" />;
-    }
+  static propTypes = {
+    database: PropTypes.object,
+    addAlerts: PropTypes.func,
+    fetchAll: PropTypes.func
+  };
 
-    let fetchCheck = this.props.anyFetching();
-    let cursorStyle = { cursor: fetchCheck ? "progress" : "auto" };
+  componentDidMount() {
+    console.log("componentDidMount summary");
+    this.props.fetchAll();
+  }
+
+  render() {
+    console.log("props:", this.props);
+    console.log("########### HERE AT SUMMARY ##############");
+    // let nullCheck = this.props.anyNull();
+    // if (nullCheck) {
+    //   return <div id="loader" />;
+    // }
+
+    // let fetchCheck = this.props.anyFetching();
+    // let cursorStyle = { cursor: fetchCheck ? "progress" : "auto" };
 
     return (
-      <Grid fluid id="summary-grid" style={cursorStyle}>
+      // <Grid fluid id="summary-grid" style={cursorStyle}>
+      <Grid fluid id="summary-grid" style={{ cursor: "auto" }}>
         <PanelGroup>
           <div className="panel-group">
             <Utilities {...this.props} />
@@ -31,22 +46,23 @@ class Summary extends React.Component {
           </div>
         </PanelGroup>
       </Grid>
+      // <div>HERE IS SUMMARY</div>
     );
   }
 
-  selectThisTab() {
-    if (this.props.getSelectedNavTab() != this.props.navKey) {
-      this.props.selectNavTab(this.props.navKey);
-    }
-  }
+  // selectThisTab() {
+  //   if (this.props.getSelectedNavTab() != this.props.navKey) {
+  //     this.props.selectNavTab(this.props.navKey);
+  //   }
+  // }
 
-  componentWillMount() {
-    this.selectThisTab();
-  }
+  // componentWillMount() {
+  //   this.selectThisTab();
+  // }
 
-  componentWillUpdate() {
-    this.selectThisTab();
-  }
+  // componentWillUpdate() {
+  //   this.selectThisTab();
+  // }
 }
 
 const Utilities = props => {
@@ -95,7 +111,7 @@ const Utilities = props => {
         </Button>
         <Button
           onClick={() =>
-            props.alert(
+            this.props.addAlerts(
               "<b>Release assignments</b> This functionality is not currently supported."
             )}
         >
@@ -106,18 +122,18 @@ const Utilities = props => {
       </ButtonGroup>
       <div id="import-form-container">
         <div className="divider" />
-        <ImportForm {...props} />
+        {/* <ImportForm {...props} /> */}
       </div>
       <div id="export-form-container">
         <div className="divider" />
-        <ExportForm {...props} />
+        {/* <ExportForm {...props} /> */}
       </div>
     </Panel>
   );
 };
 
 const Stats = props => {
-  let applicants = Object.entries(props.getApplicantsList());
+  let applicants = Object.entries(props.database.applicants);
   let gradApplicants = applicants.filter(([_, app]) =>
     ["MSc", "MASc", "MScAC", "MEng", "OG", "PhD"].includes(app.program)
   );
@@ -125,7 +141,7 @@ const Stats = props => {
     ([_, app]) => app.dept == "Computer Science"
   );
 
-  let assignments = props.getAssignmentsList();
+  let assignments = props.database.assignments;
   let unassGradApplicants = gradApplicants.filter(
     ([id, _]) => !assignments[id]
   );
@@ -133,14 +149,14 @@ const Stats = props => {
     ([id, _]) => !assignments[id]
   );
 
-  let courses = props.getCoursesList();
+  let courses = props.database.courses;
   let orderedCourses = Object.entries(courses);
   orderedCourses.sort(
     ([A, valA], [B, valB]) => (valA.code < valB.code ? -1 : 1)
   );
 
   let assignmentsList = Object.entries(assignments);
-  let applicationsList = Object.entries(props.getApplicationsList());
+  let applicationsList = Object.entries(props.database.applications);
 
   return (
     <Panel header="Assignment Statistics" id="stats">

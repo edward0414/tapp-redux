@@ -4,16 +4,21 @@ import { Link } from "react-router-dom";
 import { ApplicantTableMenu } from "../../components/applicantTableMenu.js";
 import { ApplicantTable } from "../../components/applicantTable.js";
 import { routeConfig } from "../../routeConfig.js";
+import PropTypes from "prop-types";
 
 class Unassigned extends React.Component {
-  render() {
-    let nullCheck = this.props.anyNull();
-    if (nullCheck) {
-      return <div id="loader" />;
-    }
+  static propTypes = {
+    selectApplicant: PropTypes.func
+  };
 
-    let fetchCheck = this.props.anyFetching();
-    let cursorStyle = { cursor: fetchCheck ? "progress" : "auto" };
+  render() {
+    // let nullCheck = this.props.anyNull();
+    // if (nullCheck) {
+    //   return <div id="loader" />;
+    // }
+
+    // let fetchCheck = this.props.anyFetching();
+    let cursorStyle = { cursor: "auto" };
 
     // table/menu configuration
     this.config = [
@@ -104,9 +109,9 @@ class Unassigned extends React.Component {
                 <Button
                   bsSize="xsmall"
                   style={{ borderColor: "#555" }}
-                  onClick={() => this.props.selectSingleCourse(pref.positionId)}
+                  // onClick={() => this.props.selectSingleCourse(pref.positionId)}
                 >
-                  {this.props.getCourseCodeById(pref.positionId)}
+                  {/* {this.props.getCourseCodeById(pref.positionId)} */}
                 </Button>
               </Link>
             )}

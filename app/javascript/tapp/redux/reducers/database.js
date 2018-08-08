@@ -7,7 +7,13 @@ import {
   FETCH_APPLICATIONS_SUCC,
   FETCH_APPLICATIONS_FAIL,
   FETCH_COURSES_SUCC,
-  FETCH_COURSES_FAIL
+  FETCH_COURSES_FAIL,
+  FETCH_INSTRUCTORS_SUCC,
+  FETCH_INSTRUCTORS_FAIL,
+  FETCH_SESSIONS_SUCC,
+  FETCH_SESSIONS_FAIL,
+  CREATE_INSTRUCTOR_SUCC,
+  CREATE_INSTRUCTOR_FAIL
 } from "../constants/database";
 
 /*
@@ -27,13 +33,13 @@ import {
 const defaultState = {
   isLoading: false,
   error: {},
-  applicants: {},
-  applications: {},
-  assignments: {},
-  courses: {},
-  instructors: {},
-  sessions: {},
-  importing: null
+  applicants: null,
+  applications: null,
+  assignments: null,
+  courses: null,
+  instructors: null,
+  sessions: null,
+  importing: 0
 };
 
 export default (state = defaultState, action) => {
@@ -78,6 +84,38 @@ export default (state = defaultState, action) => {
       };
 
     case FETCH_ASSIGNMENTS_FAIL:
+      return { ...state, error: action.payload, isLoading: false };
+
+    case FETCH_INSTRUCTORS_SUCC:
+      return {
+        ...state,
+        instructors: action.payload,
+        isLoading: false,
+        error: {}
+      };
+
+    case FETCH_INSTRUCTORS_FAIL:
+      return { ...state, error: action.payload, isLoading: false };
+
+    case FETCH_SESSIONS_SUCC:
+      return {
+        ...state,
+        sessions: action.payload,
+        isLoading: false,
+        error: {}
+      };
+
+    case FETCH_SESSIONS_FAIL:
+      return { ...state, error: action.payload, isLoading: false };
+
+    case CREATE_INSTRUCTOR_SUCC:
+      return {
+        ...state,
+        isLoading: false,
+        error: {}
+      };
+
+    case CREATE_INSTRUCTOR_FAIL:
       return { ...state, error: action.payload, isLoading: false };
 
     default:

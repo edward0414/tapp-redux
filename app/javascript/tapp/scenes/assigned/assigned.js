@@ -4,16 +4,26 @@ import { Link } from "react-router-dom";
 import { ApplicantTableMenu } from "../../components/applicantTableMenu.js";
 import { ApplicantTable } from "../../components/applicantTable.js";
 import { routeConfig } from "../../routeConfig";
+import PropTypes from "prop-types";
 
 class Assigned extends React.Component {
-  render() {
-    let nullCheck = this.props.anyNull();
-    if (nullCheck) {
-      return <div id="loader" />;
-    }
+  static propTypes = {
+    navKey: PropTypes.string,
+    applicants: PropTypes.object,
+    selectedTab: PropTypes.string,
+    selectApplicant: PropTypes.func,
+    selectTab: PropTypes.func,
+    fetchAll: PropTypes.func
+  };
 
-    let fetchCheck = this.props.anyFetching();
-    let cursorStyle = { cursor: fetchCheck ? "progress" : "auto" };
+  componentDidMount() {
+    console.log("Assigned did mount");
+    this.props.fetchAll();
+  }
+
+  render() {
+    console.log("###############  AT ASSIGNED  #################");
+    let cursorStyle = { cursor: "auto" };
 
     // table/menu configuration
     this.config = [
@@ -89,7 +99,7 @@ class Assigned extends React.Component {
         header: "Course(s)",
         data: p =>
           <ButtonToolbar>
-            {this.props.getAssignmentsByApplicant(p.applicantId).map(ass =>
+            {/* {this.props.getAssignmentsByApplicant(p.applicantId).map(ass =>
               <Link
                 to={
                   routeConfig.abc.route +
@@ -111,17 +121,17 @@ class Assigned extends React.Component {
                   )}&nbsp;&middot;&nbsp;{ass.hours}
                 </Button>
               </Link>
-            )}
+            )} */}
           </ButtonToolbar>,
 
-        filterLabel: "Course",
-        filterCategories: this.props.getCourseCodes(),
+        filterLabel: "Course"
+        // filterCategories: this.props.getCourseCodes(),
         // for each course, filter out applicants who are not assigned to that course
-        filterFuncs: Object.keys(this.props.getCoursesList()).map(key => p =>
-          this.props
-            .getAssignmentsByApplicant(p.applicantId)
-            .some(pref => pref.positionId == key)
-        )
+        // filterFuncs: Object.keys(this.props.getCoursesList()).map(key => p =>
+        //   this.props
+        //     .getAssignmentsByApplicant(p.applicantId)
+        //     .some(pref => pref.positionId == key)
+        // )
       }
     ];
     let className = ".navbar-margin-top";
@@ -143,7 +153,7 @@ class Assigned extends React.Component {
 
         <ApplicantTable
           config={this.config}
-          getApplicants={() => this.props.getAssignedApplicants()}
+          applicants={this.props.applicants}
           rowId={p => "assigned-" + p.applicantId}
           getSelectedSortFields={() => this.props.getSorts()}
           getSelectedFilters={() => this.props.getFilters()}
@@ -153,18 +163,16 @@ class Assigned extends React.Component {
     );
   }
 
-  selectThisTab() {
-    if (this.props.getSelectedNavTab() != this.props.navKey) {
-      this.props.selectNavTab(this.props.navKey);
+  componentWillMount() {
+    if (this.props.selectedTab !== this.props.navKey) {
+      this.props.selectTab(this.props.navKey);
     }
   }
 
-  componentWillMount() {
-    this.selectThisTab();
-  }
-
   componentWillUpdate() {
-    this.selectThisTab();
+    if (this.props.selectedTab !== this.props.navKey) {
+      this.props.selectTab(this.props.navKey);
+    }
   }
 }
 

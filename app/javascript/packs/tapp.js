@@ -1,5 +1,7 @@
-import { ReactDOM } from "react-dom";
 // import { loadComponents } from "loadable-components";
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import { createStore, compose, applyMiddleware } from "redux";
 import { ConnectedRouter, routerMiddleware } from "react-router-redux";
 import { createLogger } from "redux-logger";
@@ -10,7 +12,10 @@ import App from "../tapp/scenes/app/exporter";
 import reducers from "../tapp/redux/reducers/index";
 
 // maybe no logger when its in development mode?
-const logger = createLogger();
+const logger = createLogger({
+  predicate: (getState, action) => action.type !== "@@router/LOCATION_CHANGE",
+  collapsed: (getState, action, logEntry) => !logEntry.error
+});
 const history = createHistory();
 
 const store = createStore(
@@ -21,22 +26,21 @@ const store = createStore(
   )
 );
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   ReactDOM.render(
-//     <Provider store={store}>
-//       <ConnectedRouter history={history}>
-//         <Hello />
-//       </ConnectedRouter>
-//     </Provider>,
-//     document.getElementById("root")
-//   );
-// });
+function run() {
+  ReactDOM.render(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>,
+    document.querySelector("#root")
+  );
+}
 
-ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
-  document.getElementById("root")
-);
+const loadedStates = ["complete", "loaded", "interactive"];
+
+if (loadedStates.includes(document.readyState) && document.body) {
+  run();
+} else {
+  window.addEventListener("DOMContentLoaded", run, false);
+}

@@ -14,9 +14,11 @@ const fetchAuth = () => {
       method: "GET",
       credentials: "include"
     })
-      .then(resp => (resp.ok ? resp.json().catch(msgFailure) : respFailure))
+      .then(
+        resp => (resp.ok ? resp.json().catch() : console.log("resp failed."))
+      )
       .then(resp => {
-        dispatch(fetchingAuthSucc(resp.roles, resp.utorid, resp.development));
+        dispatch(fetchingAuthSucc(resp.roles, "reidkare", resp.development));
       })
       .catch(error => {
         dispatch(fetchingAuthFail(error));

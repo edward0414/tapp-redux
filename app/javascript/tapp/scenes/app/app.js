@@ -7,19 +7,12 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import "../../../tapp-styles";
 
 import React from "react";
 
-import { appState } from "../../appState.js";
-import { fetchAll, fetchAuth } from "../../fetch.js";
 import * as routes from "../../routeConfig.js";
 import PropTypes from "prop-types";
 
@@ -29,6 +22,7 @@ import { ApplicantModal } from "../../components/applicantModal.js";
 import Assigned from "../assigned/exporter";
 import Unassigned from "../unassigned/exporter";
 import Summary from "../summary/exporter";
+import Display from "../display/exporter";
 
 /*** Main app component ***/
 
@@ -36,22 +30,36 @@ class App extends React.Component {
   static propTypes = {
     selectedRole: PropTypes.any,
     user: PropTypes.any,
-    fetchAuth: PropTypes.func,
-    fetchApplicants: PropTypes.func,
-    fetchApplications: PropTypes.func,
-    fetchAssignments: PropTypes.func,
-    fetchCourses: PropTypes.func
+    fetchAuth: PropTypes.func
+    // fetchApplicants: PropTypes.func,
+    // fetchApplications: PropTypes.func,
+    // fetchAssignments: PropTypes.func,
+    // fetchCourses: PropTypes.func,
+    // fetchInstructors: PropTypes.func,
+    // fetchSessions: PropTypes.func,
+    // fetchAll: PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    // get current user role and username
+  //   console.log("@@@@@@@@@@@ fetching auth  @@@@@@@@@@@@@");
+  //   // get current user role and username
+  //   // this.props.fetchAuth();
+  //   // this.props.fetchAll();
+  //   // console.log("@@@@@@@@@@@ fetching data  @@@@@@@@@@@@@");
+  //   // this.props.fetchApplicants();
+  //   // this.props.fetchApplications();
+  //   // this.props.fetchAssignments();
+  //   // this.props.fetchCourses();
+  //   // this.props.fetchInstructors();
+  //   // this.props.fetchSessions();
+  //   // console.log("@@@@@@@@@@@ done fetching @@@@@@@@@@@@@");
+  // }
+
+  componentDidMount() {
+    console.log("componentDidMount app");
     this.props.fetchAuth();
-    this.props.fetchApplicants();
-    this.props.fetchApplications();
-    this.props.fetchAssignments();
-    this.props.fetchCourses();
   }
 
   render() {
@@ -63,9 +71,11 @@ class App extends React.Component {
       return <div id="loader" />;
     }
 
+    console.log("user:", user);
+
     // switch (role) {
     //   case "tapp_admin":
-    return <AdminRouter {...appState} />;
+    return <AdminRouter />;
     //   case "tapp_assistant":
     //     return <AssistantRouter {...appState} />;
     //   case "instructor":
@@ -84,21 +94,35 @@ const AdminRouter = props => {
   return (
     <Router basename="tapp">
       <div>
-        <Navbar {...props} role="tapp_admin" />
+        {/* <Navbar {...props} role="tapp_admin" /> */}
+        {/* <Navbar role="tapp_admin" /> */}
 
         <Switch>
-          <Route path={routes.routeConfig.courses.route} component={Courses} />
-          {/* <Route path={routes.routeConfig.abc.route} component={routes.ABC} /> */}
+          {/* <Route
+            path={routes.routeConfig.courses.route}
+            render={() => <Courses navKey={routeConfig.courses.id} {...props} />}
+            component={routes.Courses}
+          /> */}
+          {/* <Route
+            path={routes.routeConfig.abc.route}
+            component={routes.ABC}
+            render={() => <ABC navKey={routeConfig.abc.id} {...props} />}
+          /> */}
           <Route
             path={routes.routeConfig.assigned.route}
-            component={Assigned}
+            render={() => <Assigned navKey={routes.routeConfig.assigned.id} />}
           />
-          <Route
+          <Route path={"/display"} render={() => <Display navKey={"display"} />} />
+          {/* <Route
             path={routes.routeConfig.unassigned.route}
-            component={Unassigned}
+            render={() =>
+              <Unassigned navKey={routes.routeConfig.unassigned.id} />}
+          /> */}
+          <Route
+            path={routes.routeConfig.summary.route}
+            render={() => <Summary navKey={routes.routeConfig.summary.id} />}
           />
-          <Route path={routes.routeConfig.summary.route} component={Summary} />
-          <Redirect from="/" to={routes.routeConfig.summary.route} />
+          <Redirect from="/" to={routes.routeConfig.assigned.route} />
         </Switch>
 
         {/* {selectedApplicant &&
